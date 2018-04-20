@@ -15,6 +15,30 @@
             "request": "launch",
             "name": "destructuring",
             "program": "${workspaceRoot}/destructuring"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "shorthand",
+            "program": "${workspaceRoot}/shorthand"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "computed-property",
+            "program": "${workspaceRoot}/computed-property"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "template-strings",
+            "program": "${workspaceRoot}/template-strings"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "arrow-functions",
+            "program": "${workspaceRoot}/arrow-functions"
         }
     ]
 }
