@@ -9,6 +9,12 @@
             "request": "launch",
             "name": "scope",
             "program": "${workspaceRoot}/scope"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "destructuring",
+            "program": "${workspaceRoot}/destructuring"
         }
     ]
 }
