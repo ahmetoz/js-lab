@@ -39,6 +39,12 @@
             "request": "launch",
             "name": "arrow-functions",
             "program": "${workspaceRoot}/arrow-functions"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "using-this",
+            "program": "${workspaceRoot}/using-this"
         }
     ]
 }
