@@ -62,3 +62,66 @@ funcForLaterUse()
 funcForLaterUse("a", "b", "c") // it can not be changed like this.
 
 
+
+/* NEW BINDING */
+
+var Animal = function (color, name, type) {
+    this.color = color
+    this.name = name
+    this.type = type
+}
+
+var zebra = new Animal("black and white", "zorro", "zebra")
+
+/* 
+
+js will create a impilicit this if we call like new Animal..
+this object bound the new object being constructed like below.
+
+var Animal = function (color, name, type) {
+
+    //this = {}
+
+    this.color = color
+    this.name = name
+    this.type = type
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
