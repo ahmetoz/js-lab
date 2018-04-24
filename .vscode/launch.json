@@ -45,6 +45,16 @@
             "request": "launch",
             "name": "using-this",
             "program": "${workspaceRoot}/using-this"
+        },
+        {
+            "name": "cra-lab",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceRoot}/react-app/cra-lab/src",
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
         }
     ]
 }
