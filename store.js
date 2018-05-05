@@ -70,17 +70,17 @@ const action_add_todo = {
 //todos => todo action reducer..
 function todos(state = [], action) {
     console.log(state, action);
-
     switch (action.type) {
         case 'ADD_TODO':
             return [...state, action.todo];
         case 'REMOVE_TODO':
-            return state.filter((todo) => todo.id !== action.id);
+            return state.filter(todo => todo.id !== action.id);
         case 'TOGGLE_TODO':
-            return state.map((todo) => todo.id !== action.id ? todo 
+            return state.map(todo => todo.id !== action.id ? todo 
                     : {...todo, complete: !todo.complete});
+        default:
+            return state;
     }
-    return state;
 }
 
 
@@ -133,3 +133,45 @@ store.dispatch({
         complete: true,
     }
 });
+
+//another reducer function
+function goals(state= [], action){
+    switch(action.type){
+        case 'ADD_GOAL':
+            return [...state, action.goal];
+        case 'REMOVE_GOAL':
+            return state.filter(goal => goal.id !== action.id);
+        default:
+            return state;
+    }
+}
+
+// so how to combine reducer functions goals and todos.. ?
+//instead of one todos array we have to goals and todos array within an object
+
+function app(state = {}, action){
+    return {
+        todos: todos(state.todos, action),
+        goals: goals(state.goals, action)
+    }
+}
+
+const store2 = createStore(app);
+console.log('Store 2: ', store2);
+
+//we can use unsubscribe function to remove listeners later.
+const unsubscribe2 = store2.subscribe(() => {
+    console.log('the state: ', store2.getState());
+});
+
+store2.dispatch(action_add_todo);
+store2.dispatch({
+    type: 'ADD_GOAL',
+    goal: {
+        id: 0,
+        name: 'to be rich'
+    }
+});
+store2.dispatch(action_toggle_todo);
+store2.dispatch(action_remove_todo);
+
