@@ -67,15 +67,21 @@ const action_add_todo = {
  * ---
  */
 
+/** Action type/ event name constants */
+
+const ADD_TODO ='ADD_TODO';
+const REMOVE_TODO = 'REMOVE_TODO';
+const TOGGLE_TODO = 'TOGGLE_TODO';
+
 //todos => todo action reducer..
 function todos(state = [], action) {
     console.log(state, action);
     switch (action.type) {
-        case 'ADD_TODO':
+        case ADD_TODO:
             return [...state, action.todo];
-        case 'REMOVE_TODO':
+        case REMOVE_TODO:
             return state.filter(todo => todo.id !== action.id);
-        case 'TOGGLE_TODO':
+        case TOGGLE_TODO:
             return state.map(todo => todo.id !== action.id ? todo 
                     : {...todo, complete: !todo.complete});
         default:
@@ -100,7 +106,7 @@ const unsubscribe = store.subscribe(() => {
  */
 store.dispatch(action_add_todo);
 store.dispatch({
-    type: 'ADD_TODO',
+    type: ADD_TODO,
     todo: {
         id: 1,
         name: 'Dispatching actions',
@@ -110,12 +116,12 @@ store.dispatch({
 
 
 const action_remove_todo = {
-    type: 'REMOVE_TODO',
+    type: REMOVE_TODO,
     id: 0
 };
 
 const action_toggle_todo = {
-    type: 'TOGGLE_TODO',
+    type: TOGGLE_TODO,
     id: 0
 };
 
@@ -126,7 +132,7 @@ store.dispatch(action_remove_todo);
 unsubscribe();
 
 store.dispatch({
-    type: 'ADD_TODO',
+    type: ADD_TODO,
     todo: {
         id: 2,
         name: 'Unsubscribe listeners',
@@ -149,6 +155,8 @@ function goals(state= [], action){
 // so how to combine reducer functions goals and todos.. ?
 //instead of one todos array we have to goals and todos array within an object
 
+const ADD_GOAL = 'ADD_GOAL';
+
 function app(state = {}, action){
     return {
         todos: todos(state.todos, action),
@@ -166,7 +174,7 @@ const unsubscribe2 = store2.subscribe(() => {
 
 store2.dispatch(action_add_todo);
 store2.dispatch({
-    type: 'ADD_GOAL',
+    type: ADD_GOAL,
     goal: {
         id: 0,
         name: 'to be rich'
