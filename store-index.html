@@ -66,6 +66,90 @@
                 todos
             }
         }
+
+        //thunks allow us to return a function from action creators.
+        // also we can dispatch other actions from our action creator.
+        const thunk = (store) => (next) => (action) => {
+            if (typeof action === 'function'){
+                return action(store.dispatch);
+            } 
+            return next(action);  
+        }
+
+        function handleReceiveData() {
+            return (dispatch) => {
+                Promise.all([
+                    API.fetchTodos(),
+                    API.fetchGoals()
+                ]).then(([todos, goals]) => {
+                    dispatch(receiveDataAction(todos, goals));
+                });
+            }
+        }
+
+        function handleAddTodo(name, callback){
+            return (dispatch) => {
+                return API.saveTodo(name)
+                    .then(todo => {
+                        dispatch(addTodoAction(todo));
+                        callback();
+                    })
+                    .catch(()=> {
+                        alert('An error occured, try again');
+                    });
+            }
+        }
+
+        function handleDeleteTodo(todo) {
+            return (dispatch) => {
+                //optimistic update// remove.
+                dispatch(removeTodoAction(todo.id));
+
+                return API.deleteTodo(todo.id)
+                    .catch(() => {
+                        dispatch(addTodoAction(todo));
+                        alert('An error occured, try again');
+                    });
+            }
+        }
+
+        function handleToggleTodo(id){
+            return (dispatch) => {
+                //optimistic update// toggle.
+                dispatch(toggleTodoAction(id));
+
+                return API.saveTodoToggle(id)
+                    .catch(() => {
+                        dispatch(toggleTodoAction(id));
+                        alert('An error occured, try again');
+                    });
+            }
+        }
+
+        function handleDeleteGoal(goal){
+            return (dispatch) => {
+                //optimistic update// remove.
+                dispatch(removeGoalAction(goal.id));
+                return API.deleteGoal(goal.id)
+                    .catch(() => {
+                        dispatch(addGoalAction(goal));
+                        alert('An error occured, try again');
+                    });
+            }
+        }
+
+        function handleAddGoal(name, callback){
+            return (dispatch) => {
+                return API.saveGoal(name)
+                    .then(goal => {
+                        dispatch(addGoalAction(goal));
+                        callback();
+                    }).catch(() => {
+                        alert('An error occured, try again');
+                    });
+            }
+        }
+
         const checker = (store) => (next) => (action) => {
             if (
                 action.type === ADD_TODO &&
@@ -138,7 +222,7 @@
             todos,
             goals,
             loading,
-        }), Redux.applyMiddleware(checker, logger));
+        }), Redux.applyMiddleware(thunk, checker, logger));
     </script>
     <script type="text/babel">
       
@@ -165,37 +249,15 @@
 
         addItem = (e) => {
             e.preventDefault();
-
-            return API.saveTodo(this.input.value)
-                .then(todo => {
-                    this.props.store.dispatch(addTodoAction(todo));
-                    this.input.value = '';
-                })
-                .catch(()=> {
-                    alert('An error occured, try again');
-                });
+            this.props.store.dispatch(handleAddTodo(this.input.value, () => this.input.value = ''));
         }
 
         removeItem = (item) => {
-            //optimistic update// remove.
-            this.props.store.dispatch(removeTodoAction(item.id));
-
-            return API.deleteTodo(todo.id)
-                .catch(() => {
-                    this.props.store.dispatch(addTodoAction(item));
-                    alert('An error occured, try again');
-                });
+            this.props.store.dispatch(handleDeleteTodo(item));
         }
 
         toggleItem = (id) => {
-            //optimistic update// toggle.
-            this.props.store.dispatch(toggleTodoAction(id));
-
-            return API.saveTodoToggle(id)
-                .catch(() => {
-                    this.props.store.dispatch(toggleTodoAction(id));
-                    alert('An error occured, try again');
-                });
+            this.props.store.dispatch(handleToggleTodo(id));
         }
 
         render() {
@@ -221,25 +283,11 @@
       class Goals extends React.Component {
         addItem = (e) => {
             e.preventDefault();
-
-            return API.saveGoal(this.input.value)
-                .then(goal => {
-                    this.props.store.dispatch(addGoalAction(goal));
-                    this.input.value = '';
-                }).catch(() => {
-                    alert('An error occured, try again');
-                });
+            this.props.store.dispatch(handleAddGoal(this.input.value, () => this.input.value = ''));
         }  
 
         removeItem = (item) => {
-            //optimistic update// remove.
-            this.props.store.dispatch(removeGoalAction(item.id));
-
-            return API.deleteGoal(item.id)
-                .catch(() => {
-                    this.props.store.dispatch(addGoalAction(item));
-                    alert('An error occured, try again');
-                });
+            this.props.store.dispatch(handleDeleteGoal(item));
         }
 
         render() {
@@ -264,14 +312,7 @@
       class App extends React.Component {
         componentDidMount(){
           const { store } = this.props;
-          
-          Promise.all([
-            API.fetchTodos(),
-            API.fetchGoals()
-          ]).then(([todos, goals]) => {
-              store.dispatch(receiveDataAction(todos, goals));
-          });
-
+          store.dispatch(handleReceiveData());
           store.subscribe(() => this.forceUpdate()); 
         }
 
