@@ -47,12 +47,6 @@
             "program": "${workspaceRoot}/using-this"
         },
         {
-            "type": "node",
-            "request": "launch",
-            "name": "store",
-            "program": "${workspaceRoot}/store"
-        },
-        {
             "name": "cra-lab",
             "type": "chrome",
             "request": "launch",
