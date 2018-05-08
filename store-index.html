@@ -309,6 +309,9 @@
         }
 
         render() {
+          const { store } = this.props;
+          const { loading } = store.getState();
+
           if (loading === true){
               return (
                   <h3>Loading..</h3>
