@@ -2,7 +2,7 @@
 <input 
     type="text"
     class="form-control"
-    (input)="onUpdateServerName($event)"
+    [(ngModel)]="serverName"
 >
 <h3> {{ serverName}} </h3>
 <hr>
