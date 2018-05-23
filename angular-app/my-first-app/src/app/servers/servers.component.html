@@ -1,10 +1,13 @@
 <button 
   class="btn btn-primary"
   [disabled]="!allowNewServer"
+  (click)="onCreateServer()"
 >
   Add Server
 </button>
 
+<hr>
+<h3> {{ serverCreationStatus }} </h3>
 <hr>
 <p>
   Server with ID {{ serverId }} is {{ getServerStatus() }}
